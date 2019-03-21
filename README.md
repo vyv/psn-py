@@ -10,7 +10,7 @@ If you have implemented [**PosiStageNet**](https://www.posistage.net/) in your s
 
 # Python Wrapper
 
-This package contains the documentation, a Python wrapper around the C++ implementation of the protocol, and pre-built Windows libraries for Python 3 x86/x64. It also contains a simple example of how to use the wrapper from the server or the client side.
+This package contains a Python wrapper around the [**C++ implementation**](https://github.com/vyv-ca/psn-cpp) of the protocol and pre-built Windows libraries for Python 3 x86/x64. It also contains a simple example of how to use the wrapper from the server or the client side.
 
 The implementation is cross-platform so it should compile under Windows, Linux and Mac OS X. A Visual Studio project is given for compiling under Windows.
 
