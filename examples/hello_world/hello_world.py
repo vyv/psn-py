@@ -1,3 +1,7 @@
+# To execute this program, you need the 'psn' python module. If you are running 
+# on Windows, copy the corresponding pre-built module found in the 'libs' folder
+# in the script folder.
+
 import psn
 import time
 
