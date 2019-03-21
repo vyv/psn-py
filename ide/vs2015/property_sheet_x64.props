@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <PSN_PYTHON_PATH>$(HOMEDRIVE)$(HOMEPATH)\AppData\Local\Programs\Python\Python37</PSN_PYTHON_PATH>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="PSN_PYTHON_PATH">
+      <Value>$(PSN_PYTHON_PATH)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
