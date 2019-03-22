@@ -9,8 +9,6 @@ import time
 def get_time_ms(): return int( time.time() * 1000 )
 start_time = get_time_ms()
 def get_elapsed_time_ms(): return get_time_ms() - start_time
-def str_float(x): return "{:.1f}".format(x)
-def str_float3(v): return str_float(v.x) + ", " + str_float(v.y) + ", " + str_float(v.z)
 
 # Encoder / Decoder
 encoder = psn.encoder( "Server 1" )
@@ -26,16 +24,17 @@ for i in range( 0 , 2 ):
     # Encode
     encoder.set_trackers( trackers )
     time_stamp = get_elapsed_time_ms()
-    info_packets = encoder.encode_info( time_stamp )
-    data_packets = encoder.encode_data( time_stamp )
+    packets = []
+    packets.extend( encoder.encode_info( time_stamp ) )
+    packets.extend( encoder.encode_data( time_stamp ) )
     
     # Decode
-    for packet in info_packets:
-        decoder.decode( packet )
-    for packet in data_packets:
+    for packet in packets:
         decoder.decode( packet )
         
-    # Print result        
+    # Print result
+    def str_float(x): return "{:.1f}".format(x)
+    def str_float3(v): return str_float(v.x) + ", " + str_float(v.y) + ", " + str_float(v.z)
     print( "Server Name: " + decoder.get_psn_server_name() )
     print( "Frame ID: " + str( decoder.get_last_decoded_frame_id() ) )
         
