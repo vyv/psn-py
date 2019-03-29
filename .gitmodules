@@ -3,4 +3,4 @@
 	url = https://github.com/pybind/pybind11/
 [submodule "vendors/psn"]
 	path = vendors/psn
-	url = https://github.com/vyv-ca/psn-cpp
+	url = https://github.com/vyv/psn-cpp
