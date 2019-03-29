@@ -14,6 +14,6 @@ This package contains a Python wrapper around the [**C++ implementation**](https
 
 The implementation is cross-platform so it should compile under Windows, Linux and Mac OS X. A Visual Studio project is given for compiling under Windows.
 
-To clone the repository with all submodules, use `git clone https://github.com/vyv-ca/psn-py/ --recursive`
+To clone the repository with all submodules, use `git clone https://github.com/vyv/psn-py/ --recursive`
 
 For any question about the wrapper, please write at **info@posistage.net**
