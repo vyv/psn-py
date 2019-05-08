@@ -17,3 +17,7 @@ The implementation is cross-platform so it should compile under Windows, Linux a
 To clone the repository with all submodules, use `git clone https://github.com/vyv/psn-py/ --recursive`
 
 For any question about the wrapper, please write at **info@posistage.net**
+
+# Usage
+
+To use the wrapper in your script, you need the 'psn' python module (psn.pyd). If you are running on Windows, copy the corresponding pre-built module found in the `libs` folder in the script folder. If you are running on Linux or OS X or using a Python version that is not liste in `libs`, you need to compile the library using a C++ compiler of your choice. If you compile the library using another IDE, please provide us the resulting library so we can add it to the list!
