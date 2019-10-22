@@ -46,58 +46,89 @@ PYBIND11_MODULE( psn , m )
     m.doc() = "PosiStageNet protocol" ;
     
     // Class psn::float3
-    pybind11::class_< psn::float3 >( m , "float3" )
+    pybind11::class_< psn::float3 >( m , "Float3" )
         .def( pybind11::init< float , float , float >() )
         .def_readwrite( "x" , &psn::float3::x )
         .def_readwrite( "y" , &psn::float3::y )
         .def_readwrite( "z" , &psn::float3::z ) ;
 
-    // Class psn::psn_tracker
-    pybind11::class_< psn::psn_tracker >( m , "tracker" )
+    // Class psn::tracker
+    pybind11::class_< psn::tracker >( m , "Tracker" )
         .def( pybind11::init< uint16_t , 
-                              const ::std::string & ,
-                              psn::float3 , psn::float3 , psn::float3 , 
-                              float >() )
-        .def_readwrite( "id" , &psn::psn_tracker::id_ )
-        .def_readwrite( "name" , &psn::psn_tracker::name_ )
-        .def_readwrite( "pos" , &psn::psn_tracker::pos_ )
-        .def_readwrite( "speed" , &psn::psn_tracker::speed_ )
-        .def_readwrite( "ori" , &psn::psn_tracker::ori_ )
-        .def_readwrite( "validity" , &psn::psn_tracker::validity_ ) ;
+                              const ::std::string & >() )
+        .def( "get_id", &psn::tracker::get_id )
+        .def( "get_name", &psn::tracker::get_name )
+        .def( "set_pos", &psn::tracker::set_pos )
+        .def( "get_pos", &psn::tracker::get_pos )
+        .def( "is_pos_set", &psn::tracker::is_pos_set )
+        .def( "set_speed", &psn::tracker::set_speed )
+        .def( "get_speed", &psn::tracker::get_speed )
+        .def( "is_speed_set", &psn::tracker::is_speed_set )
+        .def( "set_ori", &psn::tracker::set_ori )
+        .def( "get_ori", &psn::tracker::get_ori )
+        .def( "is_ori_set", &psn::tracker::is_ori_set )
+        .def( "set_status", &psn::tracker::set_status )
+        .def( "get_status", &psn::tracker::get_status )
+        .def( "is_status_set", &psn::tracker::is_status_set )
+        .def( "set_accel", &psn::tracker::set_accel )
+        .def( "get_accel", &psn::tracker::get_accel )
+        .def( "is_accel_set", &psn::tracker::is_accel_set )
+        .def( "set_target_pos", &psn::tracker::set_target_pos )
+        .def( "get_target_pos", &psn::tracker::get_target_pos )
+        .def( "is_target_pos_set", &psn::tracker::is_target_pos_set )
+        .def( "set_timestamp", &psn::tracker::set_timestamp )
+        .def( "get_timestamp", &psn::tracker::get_timestamp )
+        .def( "is_timestamp_set", &psn::tracker::is_timestamp_set ) ;
+
+    // Class packet_header
+    pybind11::class_< psn::packet_header >( m , "PacketHeader" )
+        .def( pybind11::init<>() )
+        .def_readonly( "timestamp" , &psn::packet_header::timestamp_usec )
+        .def_readonly( "version_high" , &psn::packet_header::version_high )
+        .def_readonly( "version_low" , &psn::packet_header::version_low )
+        .def_readonly( "frame_id" , &psn::packet_header::frame_id )
+        .def_readonly( "frame_packet_count" , &psn::packet_header::frame_packet_count ) ;
+
+    // Class psn_decoder::info_t
+    pybind11::class_< psn::psn_decoder::info_t >( m , "Info" )
+        .def( pybind11::init<>() )
+        .def_readonly( "header" , &psn::psn_decoder::info_t::header )
+        .def_readonly( "system_name" , &psn::psn_decoder::info_t::system_name )
+        .def_readonly( "tracker_names" , &psn::psn_decoder::info_t::tracker_names ) ;
+
+    // Class psn_decoder::data_t
+    pybind11::class_< psn::psn_decoder::data_t >( m , "Data" )
+        .def( pybind11::init<>() )
+        .def_readonly( "header" , &psn::psn_decoder::data_t::header )
+        .def_readonly( "trackers" , &psn::psn_decoder::data_t::trackers ) ;
 
     // Class psn::psn_encoder
-    pybind11::class_< psn::psn_encoder >( m , "encoder" )
+    pybind11::class_< psn::psn_encoder >( m , "Encoder" )
         .def( pybind11::init< const std::string & >() )
-        .def( "set_trackers", &psn::psn_encoder::set_trackers )
-        .def( "encode_info", []( psn::psn_encoder & encoder , 
+        .def( "encode_info", []( psn::psn_encoder & encoder ,
+                                 const psn::tracker_map & trackers ,
                                  uint64_t timestamp )
-            { 
-                ::std::list< ::std::string > result ;
-                encoder.encode_info( result , timestamp ) ;
-                return get_bytes( result ) ;
+            {
+                return get_bytes( encoder.encode_info( trackers , timestamp ) ) ;
             } )
-        .def( "encode_data", []( psn::psn_encoder & encoder , 
+        .def( "encode_data", []( psn::psn_encoder & encoder ,
+                                 const psn::tracker_map & trackers ,
                                  uint64_t timestamp )
             { 
-                ::std::list< ::std::string > result ;
-                encoder.encode_data( result , timestamp ) ;
-                return get_bytes( result ) ;
-            } ) ;
+                return get_bytes( encoder.encode_data( trackers , timestamp ) ) ;
+            } )
+        .def( "get_last_info_frame_id", &psn::psn_encoder::get_last_info_frame_id )
+        .def( "get_last_data_frame_id", &psn::psn_encoder::get_last_data_frame_id ) ;
 
     // Class psn::psn_decoder
-    pybind11::class_< psn::psn_decoder >( m , "decoder" )
+    pybind11::class_< psn::psn_decoder >( m , "Decoder" )
         .def( pybind11::init() )
-        .def( "get_last_decoded_frame_id" , &psn::psn_decoder::get_last_decoded_frame_id )
-        .def( "get_trackers" , &psn::psn_decoder::get_trackers )
-        .def( "get_psn_server_name" , []( psn::psn_decoder & decoder )
-            {
-                ::std::string server_name ;
-                decoder.get_psn_server_name( server_name ) ;
-                return server_name ;
-            } )
         .def( "decode" , []( psn::psn_decoder & decoder ,
                              const ::pybind11::bytes & packet )
             {
-                decoder.decode( (::std::string)packet ) ;
-            } ) ;
+                ::std::string packet_str( packet ) ;
+                return decoder.decode( packet_str.c_str() , packet_str.size() ) ;
+            } )
+        .def( "get_info" , &psn::psn_decoder::get_info )
+        .def( "get_data" , &psn::psn_decoder::get_data ) ;
 }
